@@ -4,6 +4,19 @@ const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
 
+const nav = [
+  {
+    link: '/nav1',
+    title: 'NavItem1'
+  },
+  {
+    link: '/nav2',
+    title: 'NavItem2'
+  }
+];
+
+const nav1Router = require('./src/routes/nav1Routes')(nav);
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -16,8 +29,20 @@ app.use('/js', express.static(path.join(__dirname, '/node_modules/jquery/dist'))
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
+app.use('/nav1', nav1Router);
 app.get('/', (req, res) => {
-  res.render('index', { siteName: 'Node & Express' });
+  res.render('index', {
+    siteName: 'Node & Express',
+    nav: [
+      {
+        link: '/nav1',
+        title: 'NavItem1'
+      },
+      {
+        link: '/nav2',
+        title: 'NavItem2'
+      }]
+  });
 });
 
 app.listen(port, () => {
